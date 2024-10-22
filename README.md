@@ -1,3 +1,4 @@
+https://web.programming-hero.com/l2-b1-special-consideration-course-part-2/video/l2-b1-special-consideration-course-part-2-42-2-integrating-and-setup-nextauth-in-next-js-app
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
