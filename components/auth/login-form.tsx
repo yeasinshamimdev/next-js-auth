@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import React from "react";
+import React, { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
@@ -10,15 +10,18 @@ import { LoginSchema } from "@/schemas";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import FormSuccess from "../form-success";
+import FormError from "../form-error";
+import { login } from "@/actions/login";
 
 const LoginForm = () => {
+  const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -28,7 +31,9 @@ const LoginForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof LoginSchema>) {
-    console.log(values);
+    startTransition(() => {
+      login(values);
+    });
   }
 
   return (
@@ -41,7 +46,7 @@ const LoginForm = () => {
             🔐 Auth
           </h1>
           <p className="text-slate-400 text-lg text-center">
-            Welcome back to login{" "}
+            Welcome back to login
           </p>
         </CardHeader>
         <CardContent>
@@ -54,7 +59,11 @@ const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Your Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your email" {...field} />
+                      <Input
+                        placeholder="Your email"
+                        {...field}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -67,22 +76,32 @@ const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Your Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="*******" {...field} type="password" />
+                      <Input
+                        placeholder="*******"
+                        {...field}
+                        type="password"
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" variant={"outline"} className="w-full ">
+              <FormError message="" />
+              <FormSuccess message="" />
+              <Button
+                type="submit"
+                variant={"outline"}
+                className="w-full"
+                disabled={isPending}
+              >
                 Submit
               </Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter className="border-t-2 pt-4 justify-center">
-          <Button variant={"destructive"} className="bg-orange-400">
-            Login With Google
-          </Button>
+          <Button variant={"destructive"} className="bg-orange-400"></Button>
         </CardFooter>
       </Card>
     </div>
